@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='categorical-colour-calendar',
-    version='0.0.1',
+    version='0.0.3',
     description='Highlight dates on monthly calendar(s) from categorical event data',
     py_modules=['cccalendar'],
     package_dir={'': 'src'},

@@ -2,6 +2,7 @@ import calendar
 from datetime import datetime
 
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from dateutils import count_months, get_week_of_month
 
@@ -70,6 +71,7 @@ def draw_month_calendar(data, colour_map, year, month, ax):
 
 
 def draw_colour_calendar(data, colour_map, months_per_row=3):
+    data.index = pd.to_datetime(data.index)
     first_date = data.index.min()
     last_date = data.index.max()
 
