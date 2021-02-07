@@ -20,7 +20,6 @@ pip install -e .[dev]
 ```
 
 ## To Do
-- Check Date/Datetime compatibility
 - Check DataFrame/Series compatibility
 - Multiple events on one day
 - Automatically assigned colours if not specified
