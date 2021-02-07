@@ -1,5 +1,6 @@
 # Categorical Colour Calendar
 Highlight dates on a monthly calendar from categorical events
+![Example](https://raw.githubusercontent.com/erichards97/categorical-colour-calendar/main/examples/img.png "Optional Title")
 ## Setup
 ```
 pip install categorical-colour-calendar
@@ -26,3 +27,5 @@ pip install -e .[dev]
 - Tests
 - Allow override of default sizing/scaling values
 - Test different Python versions
+- Return fig/axes (?)
+- Colour schemes
