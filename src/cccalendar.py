@@ -3,19 +3,27 @@ from datetime import datetime
 
 import matplotlib.pyplot as plt
 
-scale = 20
+from dateutils import count_months, get_week_of_month
+
+__scale = 20
+
 
 def num_to_day(num):
-    return (num-(scale/4)) / scale
+    # Midpoint of a polygon is at n - scale/4
+    # Divide this by scale to find out how many days along we are
+    return (num - (__scale / 4)) / __scale
+
 
 def day_to_num(day):
-    return (day * scale) + (scale/4)
+    # Inverse of num_to_day
+    return (day * __scale) + (__scale / 4)
 
-def get_square_coordinates(day_of_week, week_of_month):
-    x_start = scale * day_of_week
-    x_end = (scale * day_of_week) + (scale / 2)
-    y_start = scale * week_of_month
-    y_end = (scale * week_of_month) + (scale / 2)
+
+def get_date_square_coordinates(day_of_week, week_of_month):
+    x_start = __scale * day_of_week
+    x_end = (__scale * day_of_week) + (__scale / 2)
+    y_start = __scale * week_of_month
+    y_end = (__scale * week_of_month) + (__scale / 2)
 
     bottom_left = (x_start, y_start)
     top_left = (x_start, y_end)
@@ -29,10 +37,9 @@ def get_square_coordinates(day_of_week, week_of_month):
 
 def draw_date_square(date, data, colour_map, ax):
     day_of_week = date.weekday()
-    first_day_weekday = date.replace(day=1).weekday()
-    week_of_month = int((first_day_weekday-1 + date.day) / 7)
+    week_of_month = get_week_of_month(date)
 
-    corners, centre = get_square_coordinates(day_of_week, week_of_month)
+    corners, centre = get_date_square_coordinates(day_of_week, week_of_month)
 
     colour = 'm'
     if date in data.index and data[date] in colour_map:
@@ -40,32 +47,33 @@ def draw_date_square(date, data, colour_map, ax):
 
     shape = plt.Polygon(corners, color=colour)
     ax.add_patch(shape)
-    ax.annotate(str(date.day), centre, color='w', weight='bold', fontsize=scale/2, ha='center', va='center')
+    ax.annotate(str(date.day), centre, color='w', weight='bold', fontsize=__scale * 0.75, ha='center', va='center')
 
-def draw_calendar_for_month(data, colour_map, year, month, ax):
+
+def setup_weekday_axis(ax):
+    secax = ax.secondary_xaxis('top', functions=(num_to_day, day_to_num))
+    secax.set_xticks(range(7))
+    secax.set_xticklabels(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'])
+
+
+def draw_month_calendar(data, colour_map, year, month, ax):
     month_start_day, month_num_days = calendar.monthrange(year, month)
     for day in range(1, month_num_days+1):
         current_date = datetime(year, month, day)
         draw_date_square(current_date, data, colour_map, ax)
 
-    secax = ax.secondary_xaxis('top', functions=(num_to_day, day_to_num))
-    secax.set_xticks(range(7))
-    secax.set_xticklabels(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'])
+    setup_weekday_axis(ax)
     ax.axis('scaled')
-    ax.set_title(calendar.month_name[month] + ' ' + str(year), pad=20)
+    ax.set_title(calendar.month_name[month] + ' ' + str(year), pad=20, fontsize=__scale)
     ax.axis('off')
     ax.plot()
 
-def count_months(start_month, start_year, end_month, end_year):
-    full_years = (end_year - start_year) - 1
-    months_in_start_year = 13 - start_month
-    return months_in_start_year + (full_years * 12) + end_month
 
 def draw_colour_calendar(data, colour_map, months_per_row=3):
     first_date = data.index.min()
     last_date = data.index.max()
 
-    num_months = count_months(first_date.month, first_date.year, last_date.month, last_date.year)
+    num_months = count_months(first_date, last_date)
 
     fig, axs = plt.subplots(int(num_months/months_per_row)+1, months_per_row, sharex=True, sharey=True, squeeze=False)
 
@@ -86,7 +94,7 @@ def draw_colour_calendar(data, colour_map, months_per_row=3):
         for month in range(start_month, end_month+1):
             axs_x = int(month_counter / months_per_row)
             axs_y = month_counter % months_per_row
-            draw_calendar_for_month(data, colour_map, year, month, axs[axs_x][axs_y])
+            draw_month_calendar(data, colour_map, year, month, axs[axs_x][axs_y])
             month_counter = month_counter + 1
 
     axs[0][0].invert_yaxis()
@@ -94,8 +102,4 @@ def draw_colour_calendar(data, colour_map, months_per_row=3):
     fig.set_size_inches(25, 25)
     fig.set_dpi(300)
     fig.tight_layout()
-    plt.subplots_adjust(wspace=0)
-
-# dates = pd.date_range(start='2021-01-01', end='2021-05-01')
-# df = pd.Series(np.arange(len(dates)), index=dates)
-# draw_colour_calendar(df, {})
+    plt.show()
