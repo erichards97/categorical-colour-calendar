@@ -11,6 +11,9 @@ setup(
     package_dir={'': 'src'},
     long_description=long_description,
     long_description_content_type='text/markdown',
+    url='https://github.com/erichards97/categorical-colour-calendar',
+    author='Edward Richards',
+    author_email='',
     install_requires=[
         'pandas>=1.2.1',
         'matplotlib>=3.3.4'
@@ -19,5 +22,11 @@ setup(
         'dev': [
             'pytest>=6.2.2'
         ]
-    }
+    },
+    classifiers=[
+        'Programming Language :: Python :: 3',
+        'Development Status :: 2 - Pre-Alpha',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent'
+    ]
 )
