@@ -53,7 +53,7 @@ def draw_date_square(date, data, colour_map, ax):
 def setup_weekday_axis(ax):
     secax = ax.secondary_xaxis('top', functions=(num_to_day, day_to_num))
     secax.set_xticks(range(7))
-    secax.set_xticklabels(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'])
+    secax.set_xticklabels(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'], fontsize=__scale)
 
 
 def draw_month_calendar(data, colour_map, year, month, ax):
@@ -99,7 +99,7 @@ def draw_colour_calendar(data, colour_map, months_per_row=3):
 
     axs[0][0].invert_yaxis()
 
-    fig.set_size_inches(25, 25)
-    fig.set_dpi(300)
+    fig.set_size_inches(10*min(num_months, months_per_row), 10*len(axs))
+    fig.set_dpi(200)
     fig.tight_layout()
     plt.show()

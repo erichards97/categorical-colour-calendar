@@ -17,7 +17,6 @@ draw_colour_calendar(df, {})
 - Check Date/Datetime compatibility
 - Check DataFrame/Series compatibility
 - Multiple events on one day
-- Dynamic figure sizing
 - Automatically assigned colours if not specified
 - Tests
 - Allow override of default sizing/scaling values
