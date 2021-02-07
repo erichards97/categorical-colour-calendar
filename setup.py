@@ -22,7 +22,8 @@ setup(
         'dev': [
             'pytest>=6.2.2',
             'check-manifest>=0.46',
-            'twine>=3.3.0'
+            'twine>=3.3.0',
+            'wheel>=0.36.2'
         ]
     },
     classifiers=[
