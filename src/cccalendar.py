@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from dateutils import count_months, get_week_of_month
-
+from colourutils import populate_colour_map
 __scale = 20
 
 
@@ -70,8 +70,15 @@ def draw_month_calendar(data, colour_map, year, month, ax):
     ax.plot()
 
 
-def draw_colour_calendar(data, colour_map, months_per_row=3):
+def draw_colour_calendar(data,
+                         colour_map=None,
+                         months_per_row=3):
     data.index = pd.to_datetime(data.index)
+
+    if colour_map is None:
+        colour_map = {}
+    colour_map = populate_colour_map(data, colour_map)
+
     first_date = data.index.min()
     last_date = data.index.max()
 
