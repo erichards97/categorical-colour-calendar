@@ -36,19 +36,18 @@ def get_date_square_coordinates(day_of_week, week_of_month):
     return [bottom_left, top_left, top_right, bottom_right], centre
 
 
-def draw_date_square(date, data, colour_map, ax):
+def draw_date_square(date, data, colour_map, ax, default_colour, text_colour):
     day_of_week = date.weekday()
     week_of_month = get_week_of_month(date)
 
     corners, centre = get_date_square_coordinates(day_of_week, week_of_month)
 
-    colour = 'm'
     if date in data.index and data[date] in colour_map:
         colour = colour_map[data[date]]
 
-    shape = plt.Polygon(corners, color=colour)
+    shape = plt.Polygon(corners, color=default_colour)
     ax.add_patch(shape)
-    ax.annotate(str(date.day), centre, color='w', weight='bold', fontsize=__scale * 0.75, ha='center', va='center')
+    ax.annotate(str(date.day), centre, color=text_colour, weight='bold', fontsize=__scale * 0.75, ha='center', va='center')
 
 
 def setup_weekday_axis(ax):
@@ -57,11 +56,11 @@ def setup_weekday_axis(ax):
     secax.set_xticklabels(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'], fontsize=__scale)
 
 
-def draw_month_calendar(data, colour_map, year, month, ax):
+def draw_month_calendar(data, colour_map, year, month, ax, default_colour, text_colour):
     month_start_day, month_num_days = calendar.monthrange(year, month)
     for day in range(1, month_num_days+1):
         current_date = datetime(year, month, day)
-        draw_date_square(current_date, data, colour_map, ax)
+        draw_date_square(current_date, data, colour_map, ax, default_colour, text_colour)
 
     setup_weekday_axis(ax)
     ax.axis('scaled')
@@ -72,12 +71,16 @@ def draw_month_calendar(data, colour_map, year, month, ax):
 
 def draw_colour_calendar(data,
                          colour_map=None,
+                         generate_colours=True,
+                         default_colour='m',
+                         text_colour='w',
                          months_per_row=3):
     data.index = pd.to_datetime(data.index)
 
     if colour_map is None:
         colour_map = {}
-    colour_map = populate_colour_map(data, colour_map)
+    if generate_colours:
+        colour_map = populate_colour_map(data, colour_map)
 
     first_date = data.index.min()
     last_date = data.index.max()
@@ -103,7 +106,7 @@ def draw_colour_calendar(data,
         for month in range(start_month, end_month+1):
             axs_x = int(month_counter / months_per_row)
             axs_y = month_counter % months_per_row
-            draw_month_calendar(data, colour_map, year, month, axs[axs_x][axs_y])
+            draw_month_calendar(data, colour_map, year, month, axs[axs_x][axs_y], default_colour, text_colour)
             month_counter = month_counter + 1
 
     axs[0][0].invert_yaxis()
