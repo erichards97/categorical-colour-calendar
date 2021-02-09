@@ -1,5 +1,5 @@
 # Categorical Colour Calendar
-Highlight dates on a monthly calendar from categorical events
+Library for drawing monthly calendars and highlighting dates from categorical events
 ## Example
 ![Example](https://raw.githubusercontent.com/erichards97/categorical-colour-calendar/main/examples/img.png "Optional Title")
 For more examples see the docs
