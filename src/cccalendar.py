@@ -69,15 +69,14 @@ def draw_month_calendar(data, year, month, ax, text_colour):
 
 
 def apply_colours(data, colour_map, date_colour, exclude_colour, strict_exclude, min_date, max_date):
-    data = data.map(colour_map, na_action='ignore')
-
+    data = data.map(colour_map)
     strict_exclude = strict_exclude | pd.isna(data)
     if max_date is not None:
         data.loc[(data.index < min_date) & strict_exclude] = exclude_colour
     if min_date is not None:
         data.loc[(data.index > max_date) & strict_exclude] = exclude_colour
 
-    data = data.fillna(date_colour)
+    data = data.fillna({i: date_colour for i in data.index})  # Hack to allow list-like parameter
     return data
 
 
@@ -103,12 +102,13 @@ def draw_colour_calendar(data,
                          colour_map=None,
                          generate_colours=True,
                          months_per_row=3,
-                         date_colour='m',
+                         date_colour=None,
                          text_colour='w',
                          exclude_colour='grey',
-                         strict_exclude=True,
+                         strict_exclude=False,
                          min_date=None,
-                         max_date=None):
+                         max_date=None,
+                         legend=True):
     data.index = pd.to_datetime(data.index)
 
     min_date = pd.to_datetime(min_date)
@@ -117,7 +117,7 @@ def draw_colour_calendar(data,
     if colour_map is None:
         colour_map = {}
     if generate_colours:
-        colour_map = populate_colour_map(data, colour_map, min_date, max_date, strict_exclude)
+        colour_map, date_colour = populate_colour_map(data, colour_map, min_date, max_date, strict_exclude, date_colour)
 
     first_date = data.index.min()
     last_date = data.index.max()
@@ -129,7 +129,7 @@ def draw_colour_calendar(data,
 
     fig, axs = plt.subplots(math.ceil(num_months/months_per_row), months_per_row, sharex=True, sharey=True, squeeze=False)
 
-    total_axs = len(axs) * len(axs[0])  # could use months_per_row
+    total_axs = len(axs) * len(axs[0])
     unused_axs = total_axs - num_months
     for u in range(unused_axs):
         axs[len(axs)-1][(months_per_row-1)-u].remove()
@@ -152,7 +152,8 @@ def draw_colour_calendar(data,
     axs[0][0].invert_yaxis()
 
     fig.set_size_inches(10*min(num_months, months_per_row), 10*len(axs))
-    draw_legend(fig, colour_map)
+    if legend:
+        draw_legend(fig, colour_map)
     fig.set_dpi(200)
     fig.tight_layout()
     plt.show()
