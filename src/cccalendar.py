@@ -3,6 +3,7 @@ from datetime import datetime
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import math
 
 from colourutils import populate_colour_map
 from dateutils import count_months, get_week_of_month
@@ -92,6 +93,12 @@ def extend_data(data, first_date, last_date):
     return data
 
 
+def draw_legend(fig, colour_map):
+    markers = [plt.Line2D([0,0], [0,0], color=c, marker='o', linestyle='') for c in colour_map.values()]
+    fig.legend(markers, colour_map.keys(), numpoints=1, markerscale=__scale/2, fontsize=__scale*2, loc='lower center',
+               bbox_to_anchor=(0, -0.2, 1, 1), bbox_transform=fig.transFigure, ncol=int(math.sqrt(len(colour_map))))
+
+
 def draw_colour_calendar(data,
                          colour_map=None,
                          generate_colours=True,
@@ -120,7 +127,7 @@ def draw_colour_calendar(data,
 
     num_months = count_months(first_date, last_date)
 
-    fig, axs = plt.subplots(int(num_months/months_per_row)+1, months_per_row, sharex=True, sharey=True, squeeze=False)
+    fig, axs = plt.subplots(math.ceil(num_months/months_per_row), months_per_row, sharex=True, sharey=True, squeeze=False)
 
     total_axs = len(axs) * len(axs[0])  # could use months_per_row
     unused_axs = total_axs - num_months
@@ -145,6 +152,7 @@ def draw_colour_calendar(data,
     axs[0][0].invert_yaxis()
 
     fig.set_size_inches(10*min(num_months, months_per_row), 10*len(axs))
+    draw_legend(fig, colour_map)
     fig.set_dpi(200)
     fig.tight_layout()
     plt.show()

@@ -29,4 +29,3 @@ pip install -e .[dev]
 - Test different Python versions
 - Return fig/axes
 - Docs
--Legend
