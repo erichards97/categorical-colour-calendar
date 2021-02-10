@@ -24,16 +24,9 @@ pip install -e .[dev]
 ## To Do
 - Check DataFrame/Series compatibility
 - Multiple events on one day
-- Automatically assigned colours if not specified
 - Tests
 - Allow override of default sizing/scaling values
 - Test different Python versions
 - Return fig/axes
-- Colours
-    - Default colour
-    - Out of range colour
-    - Param for update colour map
-- Date ranges
-    - Grey out dates < min and > max (controlled by param)
-    - Manually specify min/max dates to
 - Docs
+-Legend
