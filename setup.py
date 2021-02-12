@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='categorical-colour-calendar',
-    version='0.0.4',
+    version='0.0.5',
     description='Draw monthly calendars and highlight dates',
     py_modules=['cccalendar'],
     package_dir={'': 'src'},
@@ -23,7 +23,8 @@ setup(
             'pytest>=6.2.2',
             'check-manifest>=0.46',
             'twine>=3.3.0',
-            'wheel>=0.36.2'
+            'wheel>=0.36.2',
+            'sphinx==3.4.3'
         ]
     },
     classifiers=[
