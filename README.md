@@ -1,7 +1,7 @@
 # Categorical Colour Calendar
 Library for drawing monthly calendars and highlighting dates from categorical events
 ## Example
-![Example](https://raw.githubusercontent.com/erichards97/categorical-colour-calendar/main/examples/img.png "Optional Title")
+![Example](https://raw.githubusercontent.com/erichards97/categorical-colour-calendar/main/docs/source/examples/img.png "Optional Title")
 For more examples see the docs
 ## Setup
 ```
@@ -11,10 +11,15 @@ pip install categorical-colour-calendar
 ```python
 import pandas as pd
 from cccalendar import draw_colour_calendar
-
-dates = pd.date_range(start='2021-01-01', end='2021-05-01')
-df = pd.Series(range(len(dates)), index=dates)
-draw_colour_calendar(df, {})
+my_data = pd.Series({
+    '2021-01-01': 'event_one',
+    '2021-01-07': 'event_two',
+    '2021-01-10': 'event_three',
+    '2021-01-14': 'event_four',
+    '2021-01-20': 'event_one',
+    '2021-01-21': 'event_two',
+})
+draw_colour_calendar(my_data)
 ```
 ## Development
 ```
@@ -28,4 +33,9 @@ pip install -e .[dev]
 - Allow override of default sizing/scaling values
 - Test different Python versions
 - Return fig/axes
-- Docs
+- Docs (wip)
+- Heatmap mode
+- Annual calendar mode
+- Consolidate readme and docs
+- CI
+- Badges
