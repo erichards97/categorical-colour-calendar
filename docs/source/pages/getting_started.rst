@@ -11,10 +11,6 @@ Installation
 
 Usage
 #############
-::
-
-    pip install categorical-colour-calendar
-
 Basic
 =======
 Automatically generated colours
@@ -61,4 +57,4 @@ Specifying a colour map and the default square colour
 
 .. image:: /examples/ex2.png
   :width: 400
-  :alt: Example 1 image
+  :alt: Example 2 image

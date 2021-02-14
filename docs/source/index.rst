@@ -1,8 +1,3 @@
-.. Categorical Colour Calendar documentation master file, created by
-   sphinx-quickstart on Sat Feb 13 18:49:25 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Categorical Colour Calendar's documentation!
 =======================================================
 
@@ -13,6 +8,8 @@ Welcome to Categorical Colour Calendar's documentation!
    pages/introduction
    pages/getting_started
    pages/functionality
+   pages/reference
+   pages/examples
 
 
 Indices and tables
