@@ -28,7 +28,7 @@ Automatically generated colours
     })
     draw_colour_calendar(my_data)
 
-.. image:: /examples/ex1.png
+.. image:: /_static/ex1.png
   :width: 400
   :alt: Example 1 image
 
@@ -55,6 +55,6 @@ Specifying a colour map and the default square colour
     }
     draw_colour_calendar(my_data, colour_map, date_colour='#f64b00')
 
-.. image:: /examples/ex2.png
+.. image:: /_static/ex2.png
   :width: 400
   :alt: Example 2 image

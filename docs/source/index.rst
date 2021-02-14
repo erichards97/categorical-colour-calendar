@@ -32,7 +32,7 @@ There are further parameters controlling other aspects of the generated figure.
 Categorical Colour Calendar uses Matplotlib to create visualisations and handle colours, but is otherwise built from the ground up.
 This includes rendering the calendar visualisations, which are really a collection of spaced polygons on a secondary x-axis.
 
-.. image:: /examples/colourful.png
+.. image:: /_static/colourful.png
   :width: 800
   :alt: Sample calendar figure
 
