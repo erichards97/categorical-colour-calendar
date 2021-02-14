@@ -27,6 +27,4 @@ pip install -e .[dev]
 - Test different Python versions
 - Heatmap mode
 - Annual calendar mode
-- Consolidate readme and docs
 - CI
-- Badges
