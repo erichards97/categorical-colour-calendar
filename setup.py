@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='categorical-colour-calendar',
-    version='0.0.7',
+    version='0.0.8',
     description='Library for drawing monthly calendars and highlighting dates from categorical data',
     packages=[''],
     package_dir={'': 'src'},
