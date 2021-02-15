@@ -7,7 +7,7 @@ setup(
     name='categorical-colour-calendar',
     version='0.0.7',
     description='Library for drawing monthly calendars and highlighting dates from categorical data',
-    py_modules=['cccalendar'],
+    packages=[''],
     package_dir={'': 'src'},
     long_description=long_description,
     long_description_content_type='text/markdown',
