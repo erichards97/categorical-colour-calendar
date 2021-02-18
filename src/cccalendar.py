@@ -8,25 +8,12 @@ import math
 from colourutils import populate_colour_map
 from dateutils import count_months, get_week_of_month
 
-__scale = 20
 
-
-def _num_to_day(num):
-    # Midpoint of a polygon is at n - scale/4
-    # Divide this by scale to find out how many days along we are
-    return (num - (__scale / 4)) / __scale
-
-
-def _day_to_num(day):
-    # Inverse of num_to_day
-    return (day * __scale) + (__scale / 4)
-
-
-def _get_date_square_coordinates(day_of_week, week_of_month):
-    x_start = __scale * day_of_week
-    x_end = (__scale * day_of_week) + (__scale / 2)
-    y_start = __scale * week_of_month
-    y_end = (__scale * week_of_month) + (__scale / 2)
+def _get_date_square_coordinates(day_of_week, week_of_month, scale):
+    x_start = scale * day_of_week
+    x_end = (scale * day_of_week) + (scale / 2)
+    y_start = scale * week_of_month
+    y_end = (scale * week_of_month) + (scale / 2)
 
     bottom_left = (x_start, y_start)
     top_left = (x_start, y_end)
@@ -38,24 +25,27 @@ def _get_date_square_coordinates(day_of_week, week_of_month):
     return [bottom_left, top_left, top_right, bottom_right], centre
 
 
-def _draw_date_square(square_date, data, ax, text_colour):
+def _draw_date_square(square_date, data, ax, text_colour, scale):
     day_of_week = square_date.weekday()
     week_of_month = get_week_of_month(square_date)
 
-    corners, centre = _get_date_square_coordinates(day_of_week, week_of_month)
+    corners, centre = _get_date_square_coordinates(day_of_week, week_of_month, scale)
 
     shape = plt.Polygon(corners, color=data[square_date])
     ax.add_patch(shape)
-    ax.annotate(str(square_date.day), centre, color=text_colour, weight='bold', fontsize=__scale * 0.75, ha='center', va='center')
+    ax.annotate(str(square_date.day), centre, color=text_colour, weight='bold', fontsize=scale * 0.75, ha='center', va='center')
 
 
-def _setup_weekday_axis(ax):
-    secax = ax.secondary_xaxis('top', functions=(_num_to_day, _day_to_num))
+def _setup_weekday_axis(ax, scale):
+    secax = ax.secondary_xaxis('top', functions=(
+        lambda x: (x - (scale/4)) / scale,  # num to day
+        lambda x: (x * scale) + (scale / 4)  # day to num
+    ))
     secax.set_xticks(range(7))
-    secax.set_xticklabels(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'], fontsize=__scale)
+    secax.set_xticklabels(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'], fontsize=scale)
 
 
-def draw_month_calendar(data, year, month, ax, text_colour):
+def draw_month_calendar(data, year, month, ax, text_colour, scale):
     """
     Draw a calendar for a given year-month on a given axis, using a provided Series of dates and colours.
 
@@ -69,11 +59,11 @@ def draw_month_calendar(data, year, month, ax, text_colour):
     month_start_day, month_num_days = calendar.monthrange(year, month)
     for day in range(1, month_num_days+1):
         current_date = datetime(year, month, day)
-        _draw_date_square(current_date, data, ax, text_colour)
+        _draw_date_square(current_date, data, ax, text_colour, scale)
 
-    _setup_weekday_axis(ax)
+    _setup_weekday_axis(ax, scale)
     ax.axis('scaled')
-    ax.set_title(calendar.month_name[month] + ' ' + str(year), pad=20, fontsize=__scale)
+    ax.set_title(calendar.month_name[month] + ' ' + str(year), pad=20, fontsize=scale)
     ax.axis('off')
     ax.plot()
 
@@ -104,9 +94,9 @@ def _extend_data(data, first_date, last_date):
     return data
 
 
-def _draw_legend(fig, colour_map):
+def _draw_legend(fig, colour_map, scale):
     markers = [plt.Line2D([0,0], [0,0], color=c, marker='o', linestyle='') for c in colour_map.values()]
-    fig.legend(markers, colour_map.keys(), numpoints=1, markerscale=__scale/3, fontsize=__scale*2, loc='lower center',
+    fig.legend(markers, colour_map.keys(), numpoints=1, markerscale=scale/3, fontsize=scale*2, loc='lower center',
                bbox_to_anchor=(0, -0.1, 1, 1), bbox_transform=fig.transFigure, ncol=int(math.sqrt(len(colour_map))))
 
 
@@ -140,6 +130,8 @@ def draw_colour_calendar(data,
     :param legend: Whether to display the event-to-colour legend.
     :return: The Matplotlib fig and axes array.
     """
+    scale = 20  # Arbitrary value
+
     data.index = pd.to_datetime(data.index)
 
     min_date = pd.to_datetime(min_date)
@@ -177,15 +169,13 @@ def draw_colour_calendar(data,
         for month in range(start_month, end_month+1):
             axs_x = int(month_counter / months_per_row)
             axs_y = month_counter % months_per_row
-            draw_month_calendar(data, year, month, axs[axs_x][axs_y], text_colour)
+            draw_month_calendar(data, year, month, axs[axs_x][axs_y], text_colour, scale)
             month_counter = month_counter + 1
 
     axs[0][0].invert_yaxis()
 
     fig.set_size_inches(10*min(num_months, months_per_row), 10*len(axs))
     if legend:
-        _draw_legend(fig, colour_map)
+        _draw_legend(fig, colour_map, scale)
     fig.set_dpi(200)
     fig.tight_layout()
-    plt.show()
-    return fig, axs
