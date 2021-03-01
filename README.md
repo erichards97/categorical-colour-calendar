@@ -21,9 +21,7 @@ pip install -e .[dev]
 ```
 
 ## To Do
-- Tests
-- Check DataFrame compatibility
-- Multiple events on one day
+- Regression tests
 - Test different Python versions
 - Heatmap mode
 - Annual calendar mode
