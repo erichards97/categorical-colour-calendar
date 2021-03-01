@@ -18,4 +18,6 @@ is no guarantee the newly generated colours will not be similar to any colours e
 There is one other public method, ``draw_month_calendar``, detailed in :ref:`reference<Reference>`
 but not mentioned elsewhere in the documentation. This can be used to draw a calendar for a specific month.
 It does not include any of the helper functionality when using ``draw_colour_calendar`` directly so you must provide a
-Series with a supported colour value for every date in the month, making its usage much more explicit
+Series with a supported colour value for every date in the month, making its usage much more explicit.
+
+If there are multiple events present for the same date (i.e a duplicated index), the date square will have a split colour.
