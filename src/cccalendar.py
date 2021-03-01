@@ -9,9 +9,12 @@ from colourutils import populate_colour_map
 from dateutils import count_months, get_week_of_month
 
 
-def _get_date_square_coordinates(day_of_week, week_of_month, scale):
-    x_start = scale * day_of_week
-    x_end = (scale * day_of_week) + (scale / 2)
+def _get_date_square_coordinates(day_of_week, week_of_month, scale, i=1, n=1):
+    width = scale / 2
+
+    x_base = scale * day_of_week
+    x_start = x_base + (((i - 1) / n) * width)
+    x_end = x_base + ((i / n) * width)
     y_start = scale * week_of_month
     y_end = (scale * week_of_month) + (scale / 2)
 
@@ -29,11 +32,17 @@ def _draw_date_square(square_date, data, ax, text_colour, scale):
     day_of_week = square_date.weekday()
     week_of_month = get_week_of_month(square_date)
 
-    corners, centre = _get_date_square_coordinates(day_of_week, week_of_month, scale)
+    _, date_centre = _get_date_square_coordinates(day_of_week, week_of_month, scale)
+    
+    values = data[[square_date]].values
+    n = len(values)
 
-    shape = plt.Polygon(corners, color=data[square_date])
-    ax.add_patch(shape)
-    ax.annotate(str(square_date.day), centre, color=text_colour, weight='bold', fontsize=scale * 0.75, ha='center', va='center')
+    for i, val in enumerate(values):
+        corners, _ = _get_date_square_coordinates(day_of_week, week_of_month, scale, i+1, n)
+        shape = plt.Polygon(corners, color=val)
+        ax.add_patch(shape)
+        
+    ax.annotate(str(square_date.day), date_centre, color=text_colour, weight='bold', fontsize=scale * 0.75, ha='center', va='center')
 
 
 def _setup_weekday_axis(ax, scale):
@@ -90,7 +99,9 @@ def _extend_data(data, first_date, last_date):
         data[first_month_start] = None
     if last_month_end not in data.index:
         data[last_month_end] = None
+    data = data.groupby(data.index).agg(list)
     data = data.sort_index().asfreq('D')
+    data = data.explode()
     return data
 
 
