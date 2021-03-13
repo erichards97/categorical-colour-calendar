@@ -95,7 +95,7 @@ def draw_colour_calendar(data,
                          max_date=None,
                          legend=True):
     """
-    Draw monthly calendar(s) with dates from the provided data highlighted as categorical events. Optional parameters
+    Draw monthly calendar(s) with dates from the provided data highlighted as discrete events. Optional parameters
     control the appearance of the resultant figure.
 
     :param data: A Series of events with a datetime index.

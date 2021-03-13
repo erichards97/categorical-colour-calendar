@@ -10,27 +10,25 @@ Welcome to Categorical Colour Calendar's documentation!
    pages/reference
    pages/examples
 
-Categorical Colour Calendar allows you to plot monthly calendars and highlight dates based on discrete events.
+Categorical Colour Calendar allows you to plot monthly calendars and highlight discrete data.
 
-It was created as existing solutions for plotting calendars assumed continuous data and produced heatmaps (e.g. calmap, calplot).
+It was created as existing solutions for plotting calendars were tailored toward continuous data and thus produced heatmaps (e.g. calmap, calplot).
 
-These other solutions also produced calendars per year (in the style of GitHub contributions chart), rather than a more familiar monthly calendar.
+These other solutions also generated yearly calendar figures (in the style of GitHub contributions chart), rather than a more familiar monthly calendar.
 
-It has been designed to be customizable, with a range of optional parameters controlling the behaviour the resultant plot.
+It is reasonably customizable, with a range of parameters controlling the behaviour the resultant plot.
 
 The library can be used in a few different ways:
 
-* The most simple is to provide a Series of events and the event-colour mapping will be automatically generated.
+* The most simple is to provide a Series of events with a date index and the rest will be taken care of, including event-colour mapping generation.
 
-* Alternatively you can explicitly provide a dictionary mapping your events to the desired colour.
+* You can also provide a dictionary mapping your events to the desired colour.
 
-* Lastly, you could provide a Series with daily values and a corresponding colour map, giving you full control over the colour of each date on the calendar.
+* The most verbose usage is to provide a Series with daily values and corresponding colour map, giving full control over the colour of each date.
 
+There are further parameters controlling other aspects of the figure.
 
-There are further parameters controlling other aspects of the generated figure.
-
-Categorical Colour Calendar uses Matplotlib to create visualisations and handle colours, but is otherwise built from the ground up.
-This includes rendering the calendar visualisations, which are really a collection of spaced polygons on a secondary x-axis.
+Categorical Colour Calendar uses Matplotlib to render shapes on an axis and handle colour values.
 
 .. image:: /_static/colourful.png
   :width: 800
