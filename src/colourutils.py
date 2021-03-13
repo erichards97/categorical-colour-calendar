@@ -5,10 +5,7 @@ def get_n_colours(n, s=0.5, v=0.95):
     return [hsv_to_rgb((i/n, s, v)) for i in range(n)]
 
 
-def populate_colour_map(data, colour_map, min_date, max_date, strict_exclude, date_colour):
-    if strict_exclude:  # If we're ignoring events outside the date ranges, we don't want to generate colours for these
-        data = data[(data.index >= min_date) & (data.index <= max_date)]
-
+def extend_colour_map(data, colour_map, date_colour):
     missing_values = [x for x in data.dropna().unique() if x not in colour_map]  # All events that don't have a specified colour
 
     if date_colour is None:  # If the default date square colour isn't specified, we should generate this too

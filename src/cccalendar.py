@@ -1,11 +1,11 @@
 import calendar
+import math
 from datetime import datetime
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import math
 
-from colourutils import populate_colour_map
+from datautils import colour_data
 from dateutils import count_months, get_week_of_month
 
 
@@ -77,34 +77,6 @@ def draw_month_calendar(data, year, month, ax, text_colour, scale):
     ax.plot()
 
 
-def _apply_colours(data, colour_map, date_colour, exclude_colour, strict_exclude, min_date, max_date):
-    data = data.map(colour_map)  # Convert event values to colours
-
-    # Apply the exclude_colour to dates outside the date ranges
-    strict_exclude = strict_exclude | pd.isna(data)  # Whether to exclude events that fall out of date range
-    if max_date is not None:
-        data.loc[(data.index < min_date) & strict_exclude] = exclude_colour
-    if min_date is not None:
-        data.loc[(data.index > max_date) & strict_exclude] = exclude_colour
-
-    data = data.fillna(date_colour)  # Fill remaining na values with default square colour
-    return data
-
-
-def _extend_data(data, first_date, last_date):
-    first_month_start = datetime(first_date.year, first_date.month, 1)
-    _, max_day = calendar.monthrange(last_date.year, last_date.month)
-    last_month_end = datetime(last_date.year, last_date.month, max_day)
-    if first_month_start not in data:
-        data[first_month_start] = None
-    if last_month_end not in data.index:
-        data[last_month_end] = None
-    data = data.groupby(data.index).agg(list)
-    data = data.sort_index().asfreq('D')
-    data = data.explode()
-    return data
-
-
 def _draw_legend(fig, colour_map, scale):
     markers = [plt.Line2D([0,0], [0,0], color=c, marker='o', linestyle='') for c in colour_map.values()]
     fig.legend(markers, colour_map.keys(), numpoints=1, markerscale=scale/3, fontsize=scale*2, loc='lower center',
@@ -117,13 +89,13 @@ def draw_colour_calendar(data,
                          months_per_row=3,
                          date_colour=None,
                          text_colour='w',
-                         exclude_colour='grey',
+                         exclude_colour='tab:gray',
                          strict_exclude=False,
                          min_date=None,
                          max_date=None,
                          legend=True):
     """
-    Draw monthly calendar(s) with dates from the provided data highlighted as distinct events. Optional parameters
+    Draw monthly calendar(s) with dates from the provided data highlighted as categorical events. Optional parameters
     control the appearance of the resultant figure.
 
     :param data: A Series of events with a datetime index.
@@ -139,25 +111,21 @@ def draw_colour_calendar(data,
     :param min_date: Dates before the min_date are coloured with the exclude_colour.
     :param max_date: Dates after the max_date are coloured with the exclude_colour.
     :param legend: Whether to display the event-to-colour legend.
-    :return: The Matplotlib fig and axes array.
+    :return: None
     """
     scale = 20  # Arbitrary value
 
+    # Setup parameters
     data.index = pd.to_datetime(data.index)
-
-    min_date = pd.to_datetime(min_date)
-    max_date = pd.to_datetime(max_date)
 
     if colour_map is None:
         colour_map = {}
-    if generate_colours:
-        colour_map, date_colour = populate_colour_map(data, colour_map, min_date, max_date, strict_exclude, date_colour)
+
+    # Convert data to daily colour values
+    data, colour_map = colour_data(data, colour_map, date_colour, exclude_colour, min_date, max_date, generate_colours, strict_exclude)
 
     first_date = data.index.min()
     last_date = data.index.max()
-    data = _extend_data(data, first_date, last_date)
-
-    data = _apply_colours(data, colour_map, date_colour, exclude_colour, strict_exclude, min_date, max_date)
 
     num_months = count_months(first_date, last_date)
 
