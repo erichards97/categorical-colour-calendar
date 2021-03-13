@@ -1,10 +1,11 @@
-from datetime import date
 import re
+from datetime import date
+
 import pandas as pd
 
 from datautils import extend_data_range, apply_colour_map, colour_data
+from test_colourutils import colour_regex
 
-colour_regex = '#[a-fA-F0-9]{6}'
 
 def test_extend_data_range():
     s = pd.Series({
@@ -81,6 +82,7 @@ def test_colour_data():
     assert cd1['2021-02-05'] == '#ff0000'  # Strict exclude is False so 'a' should still be mapped
     assert cd1['2021-02-10'] != exclude_colour and re.match(colour_regex, cd1['2021-02-10'])  # Default colour has been generated for in-range date
     assert cd1['2021-02-24'] != cd1['2021-02-25'] and re.match(colour_regex, cd1['2021-02-25'])  # Date colour has been generated for 'c'
+    assert len(cm1) == 3
 
     # Check values are generated for the date colour but not c
     cd2, cm2 = colour_data(data, colour_map, None, exclude_colour, start_date, end_date, generate_missing_colours=False, strict_exclude=False)
@@ -88,6 +90,7 @@ def test_colour_data():
     assert cd2['2021-02-05'] == '#ff0000'  # Strict exclude is False so 'a' should still be mapped
     assert cd2['2021-02-10'] != exclude_colour and re.match(colour_regex, cd2['2021-02-10'])  # Default colour has been generated for in-range date
     assert cd2['2021-02-24'] == cd2['2021-02-25']  # Date colour has *not* been generated for 'c'
+    assert cm2 == colour_map
 
     # Check values are excluded
     cd3, cm3 = colour_data(data, colour_map, '#ffffff', exclude_colour, start_date, end_date, generate_missing_colours=False, strict_exclude=True)
@@ -96,3 +99,4 @@ def test_colour_data():
     assert cd3['2021-03-25'] == exclude_colour  # Strict exclude is True so 'c' should not be mapped
     assert cd3['2021-02-10'] != exclude_colour and re.match(colour_regex, cd3['2021-02-10'])  # Default colour has been generated for in-range date
     assert cd3['2021-03-05'] == '#ff0000'  # In-range 'a' should still be mapped
+    assert cm3 == colour_map

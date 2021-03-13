@@ -117,6 +117,7 @@ def draw_colour_calendar(data,
 
     # Setup parameters
     data.index = pd.to_datetime(data.index)
+    data.index = data.index.normalize()  # Remove time portion of datetime index
 
     if colour_map is None:
         colour_map = {}

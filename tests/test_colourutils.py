@@ -1,8 +1,11 @@
+import re
 from datetime import datetime
 
 import pandas as pd
 
 from colourutils import get_n_colours, extend_colour_map
+
+colour_regex = '#[a-fA-F0-9]{6}'
 
 # https://matplotlib.org/gallery/color/named_colors.html
 colours = [
@@ -37,6 +40,7 @@ def test_extend_colour_map():
     original_to_converted = {orig_col: new_colour_map[ev] for ev, orig_col in colour_map.items()}
 
     assert len(new_colour_map) == len(s)  # Every event has a mapped colour
+    assert all([re.match(colour_regex, c) for c in new_colour_map.values()])  # All colours are hex format
     assert all([e in new_colour_map for e in ['event_7', 'event_8']])  # Colours generated for unmapped events
     assert new_date_colour is not None  # New colour generated for date colour
     assert original_to_converted == hex_output_expectation  # Values in provided colour map correctly converted to hex
@@ -54,6 +58,7 @@ def test_extend_colour_map_no_new_date_colour():
     original_to_converted = {orig_col: new_colour_map[ev] for ev, orig_col in colour_map.items()}
 
     assert len(new_colour_map) == len(s)  # Every event has a mapped colour
+    assert all([re.match(colour_regex, c) for c in new_colour_map.values()])  # All colours are hex format
     assert all([e in new_colour_map for e in ['event_7', 'event_8']])  # Colours generated for unmapped events
     assert new_date_colour == '#000000'  # Date colour (black) is converted to hex
     assert original_to_converted == hex_output_expectation  # Values in provided colour map correctly converted to hex
