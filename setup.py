@@ -19,11 +19,14 @@ setup(
         'matplotlib>=3.3.4'
     ],
     extras_require={
-        'dev': [
+        'tests': [
             'pytest>=6.2.2',
+        ],
+        'dev': [
             'check-manifest>=0.46',
             'twine>=3.3.0',
             'wheel>=0.36.2',
+            'pytest>=6.2.2',
             'tox>=3.23.0'
         ],
         'docs': [
