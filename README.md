@@ -21,8 +21,7 @@ pip install -e .[dev]
 ```
 
 ## To Do
-- Regression tests
-- Test different Python versions
+- Expand regression tests
 - Heatmap mode
 - Annual calendar mode
 - CI

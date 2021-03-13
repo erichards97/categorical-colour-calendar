@@ -23,7 +23,8 @@ setup(
             'pytest>=6.2.2',
             'check-manifest>=0.46',
             'twine>=3.3.0',
-            'wheel>=0.36.2'
+            'wheel>=0.36.2',
+            'tox>=3.23.0'
         ],
         'docs': [
             'sphinx==3.4.3'
@@ -31,7 +32,10 @@ setup(
     },
     classifiers=[
         'Programming Language :: Python :: 3',
-        'Development Status :: 2 - Pre-Alpha',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent'
     ]
