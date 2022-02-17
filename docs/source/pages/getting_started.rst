@@ -19,14 +19,21 @@ Automatically generated colours
     import pandas as pd
     from cccalendar import draw_colour_calendar
     my_data = pd.Series({
-        '2021-01-01': 'event_one',
-        '2021-01-07': 'event_two',
-        '2021-01-10': 'event_three',
-        '2021-01-14': 'event_four',
-        '2021-01-20': 'event_one',
-        '2021-01-21': 'event_two',
+        '2022-01-04': 'Sprint start',
+        '2022-01-14': 'Sprint planning',
+        '2022-01-14': 'Sprint end',
+        '2022-01-17': 'Sprint start',
+        '2022-01-27': 'Sprint planning',
+        '2022-01-28': 'Sprint end',
+        '2022-01-31': 'Sprint start'
     })
-    draw_colour_calendar(my_data)
+    draw_colour_calendar(my_data,
+                         min_date='2022-01-04',
+                         max_date='2022-01-28',
+                         exclude_dates=['2022-01-08', '2022-01-09',
+                                        '2022-01-15', '2022-01-16',
+                                        '2022-01-22', '2022-01-23',
+                                        '2022-01-29', '2022-01-30'])
 
 .. image:: /_static/ex1.png
   :width: 400
