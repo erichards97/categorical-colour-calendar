@@ -1,5 +1,4 @@
 import re
-from datetime import date
 
 import pandas as pd
 
@@ -9,24 +8,24 @@ from test_colourutils import colour_regex
 
 def test_extend_data_range():
     s = pd.Series({
-        date(2021, 2, 27): 'a',
-        date(2021, 3, 1): 'b'
+        pd.Timestamp(2021, 2, 27): 'a',
+        pd.Timestamp(2021, 3, 1): 'b'
     })
 
     s = extend_data_range(s)
 
-    assert s.index.min() == date(2021, 2, 1)
-    assert s.index.max() == date(2021, 3, 31)
+    assert s.index.min() == pd.Timestamp(2021, 2, 1)
+    assert s.index.max() == pd.Timestamp(2021, 3, 31)
 
     t = pd.Series({
-        date(2021, 1, 1): 'a',
-        date(2021, 1, 31): 'b'
+        pd.Timestamp(2021, 1, 1): 'a',
+        pd.Timestamp(2021, 1, 31): 'b'
     })
 
     t = extend_data_range(t)
 
-    assert t.index.min() == date(2021, 1, 1)
-    assert t.index.max() == date(2021, 1, 31)
+    assert t.index.min() == pd.Timestamp(2021, 1, 1)
+    assert t.index.max() == pd.Timestamp(2021, 1, 31)
 
     u = pd.Series({
         '2021-01-31': 'a',
@@ -36,10 +35,9 @@ def test_extend_data_range():
     })
     u.index = pd.to_datetime(u.index)
     u = extend_data_range(u)
-    assert pd.to_datetime(u.index.values[0]) == date(2021, 1, 1)
-    assert pd.to_datetime(u.index.values[-1]) == date(2021, 3, 31)
+    assert pd.to_datetime(u.index.values[0]) == pd.Timestamp(2021, 1, 1)
+    assert pd.to_datetime(u.index.values[-1]) == pd.Timestamp(2021, 3, 31)
     assert len(u.index) == 90  # 31 + 28 + 31
-
 
 
 def test_apply_colour_map():
@@ -63,12 +61,12 @@ def test_apply_colour_map():
 
 def test_colour_data():
     data = pd.Series({
-        date(2021, 2, 5): 'a',
-        date(2021, 2, 15): 'b',
-        date(2021, 2, 25): 'c',
-        date(2021, 3, 5): 'a',
-        date(2021, 3, 15): 'b',
-        date(2021, 3, 25): 'c'
+        pd.Timestamp(2021, 2, 5): 'a',
+        pd.Timestamp(2021, 2, 15): 'b',
+        pd.Timestamp(2021, 2, 25): 'c',
+        pd.Timestamp(2021, 3, 5): 'a',
+        pd.Timestamp(2021, 3, 15): 'b',
+        pd.Timestamp(2021, 3, 25): 'c'
     })
 
     colour_map = {'a': '#ff0000', 'b': '#00ff00'}
