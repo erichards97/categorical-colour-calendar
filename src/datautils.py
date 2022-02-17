@@ -31,7 +31,7 @@ def extend_data_range(data):
     return data
 
 
-def apply_colour_map(data, colour_map, date_colour, exclude_colour, min_date, max_date):
+def apply_colour_map(data, colour_map, date_colour, exclude_colour, min_date, max_date, exclude_dates):
     """
     Converts the events in the Series to a colour value using the colour map for mapped events, and the default date
     and exclude colours for other dates.
@@ -41,10 +41,12 @@ def apply_colour_map(data, colour_map, date_colour, exclude_colour, min_date, ma
     :param exclude_colour: The colour for a date square which falls outside of the start/end date
     :param min_date: Dates with null data before this date will use the exclude colour
     :param max_date: Dates with null data after this date will use the exclude colour
+    :param exclude_dates: Explicit dates to use the exclude_colour
     :return: A Series with a colour value for every date
     """
     data = data.map(colour_map)
     data[pd.isna(data) & ((data.index < min_date) | (data.index > max_date))] = exclude_colour
+    data[data.index.isin(exclude_dates)] = exclude_colour
     data = data.fillna(date_colour)
     return data
 
@@ -55,6 +57,7 @@ def colour_data(data,
                 exclude_colour,
                 min_date,
                 max_date,
+                exclude_dates,
                 generate_missing_colours,
                 strict_exclude):
     """
@@ -65,7 +68,8 @@ def colour_data(data,
     :param exclude_colour: The colour for a date square outside of the start/end dates
     :param min_date: Date squares before this date use the exclude_colour
     :param max_date: Date squares after this date use the exclude_colour
-    :param generate_missing_colours: Whether or not to generate colours for events not present in the given colour_map
+    :param exclude_dates: Explicit dates to use the exclude_colour
+    :param generate_missing_colours: Whether to generate colours for events not present in the given colour_map
     :param strict_exclude: Should we apply colours for events that fall outside of the start/end dates
     :return: A Series with a daily datetime index and colour values
     """
@@ -87,7 +91,7 @@ def colour_data(data,
         # Hex conversion?
         date_colour = '#ed97ca'  # default value, light pink
 
-    coloured_data = apply_colour_map(data, colour_map, date_colour, exclude_colour, min_date, max_date)
+    coloured_data = apply_colour_map(data, colour_map, date_colour, exclude_colour, min_date, max_date, exclude_dates)
 
     return coloured_data, colour_map
 

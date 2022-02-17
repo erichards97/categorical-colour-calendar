@@ -93,6 +93,7 @@ def draw_colour_calendar(data,
                          strict_exclude=False,
                          min_date=None,
                          max_date=None,
+                         exclude_dates=None,
                          legend=True):
     """
     Draw monthly calendar(s) with dates from the provided data highlighted as discrete events. Optional parameters
@@ -110,6 +111,7 @@ def draw_colour_calendar(data,
     :param strict_exclude: Whether to exclude events which fall outside of min_date or max_date.
     :param min_date: Dates before the min_date are coloured with the exclude_colour.
     :param max_date: Dates after the max_date are coloured with the exclude_colour.
+    :param exclude_dates: Explicit dates to use the exclude_colour.
     :param legend: Whether to display the event-to-colour legend.
     :return: None
     """
@@ -122,8 +124,11 @@ def draw_colour_calendar(data,
     if colour_map is None:
         colour_map = {}
 
+    if exclude_dates is None:
+        exclude_dates = []
+
     # Convert data to daily colour values
-    data, colour_map = colour_data(data, colour_map, date_colour, exclude_colour, min_date, max_date, generate_colours, strict_exclude)
+    data, colour_map = colour_data(data, colour_map, date_colour, exclude_colour, min_date, max_date, exclude_dates, generate_colours, strict_exclude)
 
     first_date = data.index.min()
     last_date = data.index.max()
