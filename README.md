@@ -20,9 +20,3 @@ pip install categorical-colour-calendar
 ```
 pip install -e .[dev]
 ```
-
-## To Do
-- Expand regression tests
-- Heatmap mode
-- Annual calendar mode
-- CI
