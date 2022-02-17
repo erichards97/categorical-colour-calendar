@@ -16,7 +16,7 @@ setup(
     author_email='',
     install_requires=[
         'pandas>=1.2.1',
-        'matplotlib>=3.3.4'
+        'matplotlib>=3.3.4,<3.5.0'
     ],
     extras_require={
         'tests': [
