@@ -1,4 +1,7 @@
-import importlib.resources as resources
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -18,5 +21,5 @@ def test_simple_calendar():
         actual = Path(tmpdir) / "simple.png"
         plt.savefig(actual, bbox_inches='tight')
 
-        expectation_image = resources.files(__package__) / "baseline_images" / "test_regression" / "simple.png"
+        expectation_image = files(__package__) / "baseline_images" / "test_regression" / "simple.png"
         compare.compare_images(expectation_image, actual, tol=0)
