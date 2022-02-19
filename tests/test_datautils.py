@@ -3,7 +3,7 @@ import re
 import pandas as pd
 
 from datautils import extend_data_range, apply_colour_map, colour_data
-from test_colourutils import colour_regex
+from tests.test_colourutils import colour_regex
 
 
 def test_extend_data_range():

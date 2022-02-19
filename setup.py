@@ -16,11 +16,13 @@ setup(
     author_email='',
     install_requires=[
         'pandas>=1.2.1',
-        'matplotlib>=3.3.4,<3.5.0'
+        'matplotlib>=3.3.4'
     ],
     extras_require={
         'tests': [
             'pytest>=6.2.2',
+            'importlib-resources>=5.4.0',
+            'matplotlib==3.5.1'
         ],
         'dev': [
             'check-manifest>=0.46',
